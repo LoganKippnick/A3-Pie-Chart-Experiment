@@ -1,0 +1,25 @@
+{
+  "name": "a3-pie-chart-experiment",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "generate": "node pie_generator.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LoganKippnick/A3-Pie-Chart-Experiment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/LoganKippnick/A3-Pie-Chart-Experiment/issues"
+  },
+  "homepage": "https://github.com/LoganKippnick/A3-Pie-Chart-Experiment#readme",
+  "dependencies": {
+    "d3": "^7.9.2",
+    "jsdom": "^31.0.1"
+  }
+}
