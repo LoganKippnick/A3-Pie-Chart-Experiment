@@ -12,10 +12,14 @@ const outputDirectory = join(dirname(fileURLToPath(import.meta.url)), "charts");
 // CHART SETTINGS
 const width = 450;
 const margin = 40;
+const backgroundColor = "transparent";
 const sliceColor = "#cccccc";
 const restColor = "#ffffff";
+const strokeColor = "#000000";
+const strokeWidthPx = 0;
+const dotRadiusPx = 3;
 const percentages = [0.1, 0.15, 0.25, 0.35, 0.45, 0.5, 0.6, 0.75, 0.8, 0.9];
-const minDegreesFromCardinal = 10;
+const randAlignmentMinDegreesFromCardinal = 10;
 
 
 /**
@@ -35,6 +39,7 @@ function generatePiePaths(percentage, alignmentDegrees, clockwise) {
         .append("svg")
             .attr("width", width)
             .attr("height", width)
+            .style("background-color", backgroundColor)
         .append("g")
             .attr("transform", `translate(${width / 2}, ${width / 2})`);
 
@@ -52,7 +57,7 @@ function generatePiePaths(percentage, alignmentDegrees, clockwise) {
         .endAngle(endRadians);
     const dataReady = pie(Object.entries(data));
 
-    return chart
+    const paths = chart
         .selectAll("path")
         .data(dataReady)
         .join("path")
@@ -60,8 +65,21 @@ function generatePiePaths(percentage, alignmentDegrees, clockwise) {
             .innerRadius(0)
             .outerRadius(radius))
         .attr("fill", d => color(d.data[0]))
-        .attr("stroke", "black")
-        .style("stroke-width", "2px");
+        .attr("stroke", strokeColor)
+        .style("stroke-width", `${strokeWidthPx}px`);
+
+    // Place dot inside the highlighted slice, if requested.
+    if (dotRadiusPx > 0) {
+        const dotAngle = startRadians + direction * Math.PI * percentage;
+        const dotDistance = radius * 0.66;
+        chart.append("circle")
+            .attr("cx", dotDistance * Math.sin(dotAngle))
+            .attr("cy", -dotDistance * Math.cos(dotAngle))
+            .attr("r", dotRadiusPx)
+            .attr("fill", strokeColor);
+    }
+
+    return paths;
 }
 
 /**
@@ -94,7 +112,7 @@ for (const p of percentages) {
     // Two clockwise alignments, at least 10 degrees from cardinal directions.
     for (let i = 1; i <= 2; i++) {
         const quadrant = Math.floor(Math.random() * 4);
-        const offsetDegrees = Math.floor(Math.random() * (90 - 2 * minDegreesFromCardinal)) + minDegreesFromCardinal;
+        const offsetDegrees = Math.floor(Math.random() * (90 - 2 * randAlignmentMinDegreesFromCardinal)) + randAlignmentMinDegreesFromCardinal;
         const alignmentDegrees = quadrant * 90 + offsetDegrees;
         await savePieSvg(
             generatePiePaths(p, alignmentDegrees, true),
