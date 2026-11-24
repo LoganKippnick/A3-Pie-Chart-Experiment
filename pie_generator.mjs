@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { JSDOM } from "jsdom";
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -96,9 +96,14 @@ async function savePieSvg(paths, filename) {
 // Create the output directory if needed.
 await mkdir(outputDirectory, { recursive: true });
 
-// Clear existing chart files.
-await rm(join(outputDirectory, "*.svg"), { force: true });
+// Remove existing SVG files in the output directory.
+for (const name of await readdir(outputDirectory)) {
+    if (name.endsWith(".svg")) {
+        await rm(join(outputDirectory, name));
+    }
+}
 
+// Generate pie charts of the alignments and directions of interest for each percentage.
 for (const p of percentages) {
     // Top alignment, clockwise.
     await savePieSvg(generatePiePaths(p, 0, true), join(outputDirectory, `top_cw_${p * 100}.svg`));
@@ -109,7 +114,7 @@ for (const p of percentages) {
     // Right alignment, clockwise.
     await savePieSvg(generatePiePaths(p, 90, true), join(outputDirectory, `right_cw_${p * 100}.svg`));
 
-    // Two clockwise alignments, at least 10 degrees from cardinal directions.
+    // Two random alignments, clockwise.
     for (let i = 1; i <= 2; i++) {
         const quadrant = Math.floor(Math.random() * 4);
         const offsetDegrees = Math.floor(Math.random() * (90 - 2 * randAlignmentMinDegreesFromCardinal)) + randAlignmentMinDegreesFromCardinal;
