@@ -13,12 +13,12 @@ const outputDirectory = join(dirname(fileURLToPath(import.meta.url)), "charts");
 const width = 450;
 const margin = 40;
 const backgroundColor = "transparent";
-const sliceColor = "#cccccc";
+const sliceColor = "#bbbbbb";
 const restColor = "#ffffff";
 const strokeColor = "#000000";
-const strokeWidthPx = 0;
-const dotRadiusPx = 3;
-const percentages = [0.1, 0.15, 0.25, 0.35, 0.45, 0.5, 0.6, 0.75, 0.8, 0.9];
+const strokeWidthPx = 3;
+const dotRadiusPx = 0;
+const percentages = [0.05, 0.1, 0.15, 0.25, 0.35, 0.4, 0.5, 0.6, 0.75, 0.85, 0.95];
 const randAlignmentMinDegreesFromCardinal = 10;
 
 
